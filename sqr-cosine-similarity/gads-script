@@ -7,8 +7,8 @@ function main() {
   const settingsSheet = spreadsheet.getSheetByName(SETTINGS_SHEET_NAME);
   const exportSheet = spreadsheet.getSheetByName(EXPORT_SHEET_NAME);
 
-  const dateRangeRaw = settingsSheet.getRange('A1').getValue().toString().trim().toUpperCase();
-  const campaignFilter = settingsSheet.getRange('A2').getValue().toString().trim();
+  const dateRangeRaw = settingsSheet.getRange('C6').getValue().toString().trim().toUpperCase();
+  const campaignFilter = settingsSheet.getRange('C8').getValue().toString().trim();
 
   // Validate and prepare date range
   let dateRangeClause = '';
