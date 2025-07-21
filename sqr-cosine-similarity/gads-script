@@ -1,1 +1,70 @@
+function main() {
+  const SHEET_URL = 'GOES_HERE'; // ← Replace this
+  const SETTINGS_SHEET_NAME = 'Settings';
+  const EXPORT_SHEET_NAME = 'Search Terms Export';
 
+  const spreadsheet = SpreadsheetApp.openByUrl(SHEET_URL);
+  const settingsSheet = spreadsheet.getSheetByName(SETTINGS_SHEET_NAME);
+  const exportSheet = spreadsheet.getSheetByName(EXPORT_SHEET_NAME);
+
+  const dateRangeRaw = settingsSheet.getRange('A1').getValue().toString().trim().toUpperCase();
+  const campaignFilter = settingsSheet.getRange('A2').getValue().toString().trim();
+
+  // Validate and prepare date range
+  let dateRangeClause = '';
+  const customDatePattern = /^\d{4}-\d{2}-\d{2} to \d{4}-\d{2}-\d{2}$/;
+
+  if (customDatePattern.test(dateRangeRaw)) {
+    const [startDate, endDate] = dateRangeRaw.split(' to ');
+    dateRangeClause = `DURING ${startDate},${endDate}`;
+  } else {
+    dateRangeClause = `DURING ${dateRangeRaw}`; // e.g., LAST_7_DAYS
+  }
+
+  // Clear and prepare export sheet
+  exportSheet.clearContents();
+  exportSheet.appendRow([
+    'Campaign',
+    'Ad Group',
+    'Keyword',
+    'Search Term',
+    'Clicks',
+    'Impressions',
+    'Cost',
+    'Conversions',
+    'Conversion Value'
+  ]);
+
+  // Build and run query
+  const report = AdsApp.report(`
+    SELECT
+      CampaignName,
+      AdGroupName,
+      KeywordTextMatchingQuery,
+      Query,
+      Clicks,
+      Impressions,
+      Cost,
+      Conversions,
+      ConversionValue
+    FROM SEARCH_QUERY_PERFORMANCE_REPORT
+    WHERE CampaignName CONTAINS_IGNORE_CASE '${campaignFilter}'
+    ${dateRangeClause}
+  `);
+
+  const rows = report.rows();
+  while (rows.hasNext()) {
+    const row = rows.next();
+    exportSheet.appendRow([
+      row['CampaignName'],
+      row['AdGroupName'],
+      row['KeywordTextMatchingQuery'],
+      row['Query'],
+      parseInt(row['Clicks'], 10),
+      parseInt(row['Impressions'], 10),
+      parseFloat(row['Cost']),
+      parseFloat(row['Conversions']),
+      parseFloat(row['ConversionValue'])
+    ]);
+  }
+}
