@@ -31,17 +31,12 @@ Both tabs are hidden in the template Sheet and the dashboard tabs read from them
 ## Setup
 
 1. **[Make a copy of the template Google Sheet](https://docs.google.com/spreadsheets/d/18p-ZMXmIf2VNxzVmqAqAcmmScgDdSXz50vLnY6MqHZw/copy)**. It's already set up with the tabs the script writes to.
-2. Authorise the Sheet's own Apps Script. The template includes a small script that keeps number formatting in step when you change the metric shown on the dashboard, and your copy needs your permission to run it:
-   1. In your copy, go to **Extensions > Apps Script**.
-   2. Make sure `onEdit` is selected in the function dropdown at the top, click **Run**, then **Review permissions** and choose your Google account.
-   3. If you see **Google hasn't verified this app**, click **Advanced**, then **Go to (project name) (unsafe)**. This warning is normal for an Apps Script copied along with a Sheet.
-   4. Click **Allow**, then close the Apps Script tab. The execution log may show an error, because `onEdit` expects a real edit to react to. That's expected: permission is granted and it will run automatically from then on.
-3. Take your copy's ID from its URL: the long string between `/d/` and `/edit`. For example, in `https://docs.google.com/spreadsheets/d/abc123XYZ/edit`, the ID is `abc123XYZ`.
-4. Copy [`script.js`](script.js).
-5. In Google Ads, go to **Tools > Bulk actions > Scripts** and click **+** to add a new script.
-6. Paste the code in and replace `YOUR_SPREADSHEET_ID` in the `CONFIG` block with your copy's ID.
-7. Click **Authorise**, then **Preview** and check the logs.
-8. Save and schedule it to run daily.
+2. Take your copy's ID from its URL: the long string between `/d/` and `/edit`. For example, in `https://docs.google.com/spreadsheets/d/abc123XYZ/edit`, the ID is `abc123XYZ`.
+3. Copy [`script.js`](script.js).
+4. In Google Ads, go to **Tools > Bulk actions > Scripts** and click **+** to add a new script.
+5. Paste the code in and replace `YOUR_SPREADSHEET_ID` in the `CONFIG` block with your copy's ID.
+6. Click **Authorise**, then **Preview** and check the logs.
+7. Save and schedule it to run daily.
 
 ## Settings
 
